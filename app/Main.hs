@@ -242,7 +242,7 @@ askRoot = asks (defaultRootWindow . display)
 instance C.HasSpec Configuration where
 	anySpec = C.sectionsSpec "configuration" $ pure Configuration
 		-- TODO: NL might not always be mod2Mask
-		<*> (fromMaybe [mod2Mask] <$> C.optSection' "ignore" modifiersSpec "keymasks to ignore when deciding whether a keypress matches (default: NL)")
+		<*> (nub . fromMaybe [mod2Mask] <$> C.optSection' "ignore" modifiersSpec "keymasks to ignore when deciding whether a keypress matches (default: NL)")
 		<*> (fold <$> C.optSection' "bindings" bindingRequestsSpec "keys to watch for and the actions to take when they're pressed (default: no bindings)")
 
 bindingRequestsSpec :: C.ValueSpec [(BindingRequest, Action)]
