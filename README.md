@@ -25,7 +25,7 @@ The `ignore` field is modifiers that you want to be "ignored" -- that is, where 
 
 The `bindings` field is a collection (possibly empty) of bindings and actions. It's optional, and the default has no bindings or actions. Each binding has a modifier part and a key part.
 
-The modifier part is a sequence, where each element of the sequence is one of the following strings followed by a `-`:
+The modifier part is a sequence (possibly empty), where each element of the sequence is one of the following strings followed by a `-`:
 
     | string | meaning                                     |
     |--------|---------------------------------------------|
