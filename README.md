@@ -27,19 +27,21 @@ The `bindings` field is a collection (possibly empty) of bindings and actions. I
 
 The modifier part is a sequence, where each element of the sequence is one of the following strings followed by a `-`:
 
-| string | meaning |
-|:-------|:--------|
-| `S` | shift |
-| `L` | lock (usually capslock) |
-| `C` | control |
-| `A` | alt (=mod1) |
-| `M1` | mod1 (usually alt) |
-| `NL` | numlock (=mod2) |
-| `M2` | mod2 (usually numlock) |
-| `M3` | mod3 |
-| `M4` | mod4 (usually the Windows key or similar) |
-| `M5` | mod5 |
-| `B` | no (additional) modifier; this string is required for unmodified keycodes and unmodified keysyms that do not start with a letter because `config-value` atoms must start with a letter |
+    | string | meaning                                     |
+    |--------|---------------------------------------------|
+    | S      | shift                                       |
+    | L      | lock (usually capslock)                     |
+    | C      | control                                     |
+    | A      | alt (=mod1)                                 |
+    | M1     | mod1 (usually alt)                          |
+    | NL     | numlock (=mod2)                             |
+    | M2     | mod2 (usually numlock)                      |
+    | M3     | mod3                                        |
+    | M4     | mod4 (usually the Windows key or similar)   |
+    | M5     | mod5                                        |
+    | B      | no (additional) modifier; see next sentence |
+
+The `B-` prefix is required for unmodified keycodes and unmodified keysyms that do not start with a letter because `config-value` atoms must start with a letter.
 
 You may also use lower case, but the case must be consistent within each string (e.g. `nL` is not allowed). Only the presence or absence of one of these strings matters; if there are multiple appearances, all but the first are ignored. For example, `C-S-`, `C-S-C-`, `c-S-`, and `c-b-s-b-C-B-S-` all mean the same thing: for this keybinding to fire, both control and shift (and nothing else) must be held down.
 
