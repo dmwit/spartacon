@@ -242,7 +242,7 @@ askRoot = asks (defaultRootWindow . display)
 instance C.HasSpec Configuration where
 	anySpec = C.sectionsSpec "configuration" $ pure Configuration
 		-- TODO: NL might not always be mod2Mask
-		<*> (nub . fromMaybe [mod2Mask] <$> C.optSection' "ignore" modifiersSpec "keymasks to ignore when deciding whether a keypress matches (default: NL)")
+		<*> (nub . fromMaybe [mod2Mask] <$> C.optSection' "ignore" (C.listSpec C.anySpec) "keymasks to ignore when deciding whether a keypress matches (default: NL)")
 		<*> (fold <$> C.optSection' "bindings" bindingRequestsSpec "keys to watch for and the actions to take when they're pressed (default: no bindings)")
 
 bindingRequestsSpec :: C.ValueSpec [(BindingRequest, Action)]
@@ -257,8 +257,8 @@ instance C.HasSpec Action where
 	anySpec = (Quit <$ C.atomSpec "quit") C.<!> (Quit <$ C.atomSpec "exit")
 	    C.<!> (Print <$> C.anySpec)
 
-modifiersSpec :: C.ValueSpec [KeyMask]
-modifiersSpec = C.customSpec "modifiers" C.anySpec (ppParseError "modifiers" . parseModifiers)
+instance C.HasSpec KeyMask where
+	anySpec = foldr1 (C.<!>) [mask <$ C.atomSpec label | (label, mask) <- modifierMap]
 
 parseModifier :: Text -> Validation [(Text, [Text])] (Text, KeyMask)
 parseModifier t = head $
@@ -273,13 +273,6 @@ parseOnlyModifier t = case parseModifier t of
 		| T.null t' -> pure m
 		| otherwise -> Failure [(t', ["<end of string>"])]
 	Failure errs -> Failure errs
-
-parseModifiers :: Text -> Validation [(Text, [Text])] [KeyMask]
-parseModifiers t
-	| T.null t = pure []
-	| otherwise = case parseModifier t of
-		Success (t', m) -> (m:) <$> parseModifiers t'
-		err -> err *> parseModifiers (T.drop 1 t)
 
 parseKey :: Text -> Validation [(Text, [Text])] (Either KeySym KeyCode)
 parseKey t
