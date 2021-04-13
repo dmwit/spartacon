@@ -54,6 +54,7 @@ main = do
 				KeyEvent{}
 					| ev_event_type ev /= keyPress -> pure ()
 					| otherwise -> do
+						x ungrabKeyboard (ev_time ev)
 						bs <- gets bindings
 						io $ case M.lookup (ev_state ev, ev_keycode ev) bs of
 							Just Quit -> exitWith ExitSuccess
